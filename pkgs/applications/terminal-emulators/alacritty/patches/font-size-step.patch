@@ -1,0 +1,32 @@
+--- a/alacritty/src/event.rs
++++ b/alacritty/src/event.rs
+@@ -53,7 +53,7 @@
+ use crate::display::hint::HintMatch;
+ use crate::display::window::Window;
+ use crate::display::{Display, Preedit, SizeInfo};
+-use crate::input::{self, ActionContext as _, FONT_SIZE_STEP};
++use crate::input::{self, ActionContext as _, FONT_SIZE_STEP, FONT_SIZE_MIN};
+ use crate::message_bar::{Message, MessageBuffer};
+ use crate::scheduler::{Scheduler, TimerId, Topic};
+ use crate::window_context::WindowContext;
+@@ -444,7 +444,7 @@
+     }
+ 
+     fn change_font_size(&mut self, delta: f32) {
+-        *self.font_size = max(*self.font_size + delta, Size::new(FONT_SIZE_STEP));
++        *self.font_size = max(*self.font_size + delta, Size::new(FONT_SIZE_MIN));
+         let font = self.config.font.clone().with_size(*self.font_size);
+         self.display.pending_update.set_font(font);
+     }
+--- a/alacritty/src/input.rs
++++ b/alacritty/src/input.rs
+@@ -45,7 +45,8 @@
+ use crate::scheduler::{Scheduler, TimerId, Topic};
+ 
+ /// Font size change interval.
+-pub const FONT_SIZE_STEP: f32 = 0.5;
++pub const FONT_SIZE_STEP: f32 = 5.;
++pub const FONT_SIZE_MIN: f32 = 4.;
+ 
+ /// Interval for mouse scrolling during selection outside of the boundaries.
+ const SELECTION_SCROLLING_INTERVAL: Duration = Duration::from_millis(15);

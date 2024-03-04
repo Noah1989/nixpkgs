@@ -81,6 +81,8 @@ rustPlatform.buildRustPackage rec {
     OpenGL
   ];
 
+  patches = [ ./patches/font-size-step.patch ];
+
   outputs = [ "out" "terminfo" ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
